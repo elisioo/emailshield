@@ -1256,3 +1256,63 @@
     max-width: 92%;
   }
 }
+
+/* Animated scan status. */
+.scan-loading-field {
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+.loading-shapes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  height: 32px;
+}
+.loading-shapes i {
+  display: block;
+  width: 15px;
+  height: 15px;
+  background: #8054e8;
+  border-radius: 50%;
+  animation: scan-shape-bounce 1.4s ease-in-out infinite;
+}
+.loading-shapes i:nth-child(2) {
+  border-radius: 0;
+  background: #21a6a1;
+  animation-delay: .16s;
+}
+.loading-shapes i:nth-child(3) {
+  border-radius: 0;
+  background: #eda83b;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  animation-delay: .32s;
+}
+.scan-window[aria-busy="true"] .form-message {
+  color: #6941b5;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 12px 0;
+}
+.scan-window[aria-busy="true"] .window-controls i {
+  background: #8054e8;
+  animation: scan-shape-bounce 1.4s ease-in-out infinite;
+}
+.scan-window[aria-busy="true"] .window-controls i:nth-child(2) {
+  background: #21a6a1;
+  animation-delay: .16s;
+}
+.scan-window[aria-busy="true"] .window-controls i:nth-child(3) {
+  background: #eda83b;
+  animation-delay: .32s;
+}
+@keyframes scan-shape-bounce {
+  0%, 100% { transform: translateY(3px) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(180deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading-shapes i,
+  .scan-window[aria-busy="true"] .window-controls i { animation: none; }
+}
