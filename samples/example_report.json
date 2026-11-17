@@ -1,0 +1,162 @@
+{
+  "source": "suspicious_invoice.eml",
+  "subject": "Urgent: New bank details for invoice",
+  "from": "Vendor Accounts <billing@vendor-example.com>",
+  "reply": "payments@account-alert.example",
+  "return_path": "<sender@vendor-example.com>",
+  "authentication_claims": [
+    {
+      "method": "SPF",
+      "reported_result": "fail",
+      "verified": false
+    },
+    {
+      "method": "DKIM",
+      "reported_result": "none",
+      "verified": false
+    },
+    {
+      "method": "DMARC",
+      "reported_result": "fail",
+      "verified": false
+    }
+  ],
+  "header_only": false,
+  "links": [
+    {
+      "url": "http://192.0.2.40/pay",
+      "host": "192.0.2.40",
+      "label": "https://vendor-example.com/pay"
+    }
+  ],
+  "attachments": [
+    {
+      "filename": "statement.pdf.exe",
+      "extension": ".exe",
+      "content_type": "application/octet-stream",
+      "size_bytes": 22,
+      "disposition": "attachment"
+    }
+  ],
+  "findings": [
+    {
+      "id": "DANGEROUS_FILE_EXTENSION",
+      "category": "Attachments",
+      "level": "high",
+      "title": "Potentially executable attachment type",
+      "detail": "One or more file extensions are commonly used to run code or scripts.",
+      "weight": 34,
+      "evidence": "statement.pdf.exe",
+      "recommendation": "Do not run unexpected executable or script attachments."
+    },
+    {
+      "id": "URL_LABEL_MISMATCH",
+      "category": "Links",
+      "level": "high",
+      "title": "Visible link and destination differ",
+      "detail": "The domain shown in the link text does not match the clickable destination.",
+      "weight": 32,
+      "evidence": "Shown: vendor-example.com | Destination: 192.0.2.40",
+      "recommendation": "Do not trust a link based only on its visible label."
+    },
+    {
+      "id": "URL_IP_ADDRESS",
+      "category": "Links",
+      "level": "high",
+      "title": "Link points to a raw IP address",
+      "detail": "The URL points directly to an IP address rather than a named domain.",
+      "weight": 31,
+      "evidence": "192.0.2.40",
+      "recommendation": "Confirm the destination through a trusted website, not this link."
+    },
+    {
+      "id": "DOUBLE_EXTENSION",
+      "category": "Attachments",
+      "level": "high",
+      "title": "Deceptive double-extension filename",
+      "detail": "A filename appears to disguise an executable/script as a document or image.",
+      "weight": 20,
+      "evidence": "statement.pdf.exe",
+      "recommendation": "Check the complete attachment filename and avoid opening disguised files."
+    },
+    {
+      "id": "PAYMENT_CHANGE",
+      "category": "Phishing and BEC",
+      "level": "medium",
+      "title": "Unusual payment or bank-details language",
+      "detail": "Payment changes and fund-transfer requests can signal business email compromise.",
+      "weight": 24,
+      "evidence": "bank details",
+      "recommendation": "Verify payment and banking changes using an existing trusted phone number."
+    },
+    {
+      "id": "SENDER_REPLY_DOMAIN",
+      "category": "Sender and headers",
+      "level": "medium",
+      "title": "From and Reply-To domains differ",
+      "detail": "Replies would go to a different domain than the sender. This can be legitimate, but warrants checking.",
+      "weight": 23,
+      "evidence": "From: vendor-example.com | Reply-To: account-alert.example",
+      "recommendation": "Contact the organization through a known address instead of replying to this message."
+    },
+    {
+      "id": "CREDENTIAL_REQUEST",
+      "category": "Phishing and BEC",
+      "level": "medium",
+      "title": "Account verification or credential request",
+      "detail": "A message asks for account verification or secret information.",
+      "weight": 18,
+      "evidence": "Verify your account",
+      "recommendation": "Use the organization's known website or app instead of email links to manage accounts."
+    },
+    {
+      "id": "REPORTED_AUTH_FAILURE",
+      "category": "Sender and headers",
+      "level": "medium",
+      "title": "Submitted header reports authentication failure",
+      "detail": "Authentication-Results text claims a failure, but the header itself is untrusted and is not independently validated.",
+      "weight": 15,
+      "evidence": "SPF=fail, DMARC=fail (unverified header claim)",
+      "recommendation": "Do not treat copied authentication headers as verified; confirm suspicious messages separately."
+    },
+    {
+      "id": "URL_HTTP",
+      "category": "Links",
+      "level": "low",
+      "title": "Unencrypted HTTP link",
+      "detail": "The link uses HTTP instead of HTTPS. This alone does not prove maliciousness.",
+      "weight": 9,
+      "evidence": "192.0.2.40",
+      "recommendation": "Avoid entering credentials or other sensitive details over HTTP."
+    },
+    {
+      "id": "URGENCY",
+      "category": "Phishing and BEC",
+      "level": "low",
+      "title": "Urgency or pressure language",
+      "detail": "Pressure can be a phishing tactic, but urgent wording alone is not proof of fraud.",
+      "weight": 8,
+      "evidence": "Urgent",
+      "recommendation": "Pause before acting on a request that pressures you to respond quickly."
+    }
+  ],
+  "score": 100,
+  "level": "high",
+  "recommendations": [
+    "Do not open unexpected attachments or follow links until the sender is verified.",
+    "Do not run unexpected executable or script attachments.",
+    "Do not trust a link based only on its visible label.",
+    "Confirm the destination through a trusted website, not this link.",
+    "Check the complete attachment filename and avoid opening disguised files.",
+    "Verify payment and banking changes using an existing trusted phone number.",
+    "Contact the organization through a known address instead of replying to this message."
+  ],
+  "limitations": [
+    "Risk scores reflect heuristic indicators and are not proof of safety or maliciousness.",
+    "Authentication-Results claims are copied from the submitted email, not independently verified.",
+    "URLs are never visited and no live threat-intelligence service is queried.",
+    "Attachment files are not executed, extracted, or malware-scanned.",
+    "Email content is processed in memory and not stored by default."
+  ],
+  "analysis_version": "1.0"
+}

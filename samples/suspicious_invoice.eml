@@ -1,0 +1,22 @@
+From: "Vendor Accounts" <billing@vendor-example.com>
+Reply-To: payments@account-alert.example
+Return-Path: <sender@vendor-example.com>
+To: recipient@example.org
+Subject: Urgent: New bank details for invoice
+MIME-Version: 1.0
+Authentication-Results: mail.example.org; spf=fail smtp.mailfrom=vendor-example.com; dkim=none; dmarc=fail
+Content-Type: multipart/mixed; boundary="emailshield-sample"
+
+--emailshield-sample
+Content-Type: text/html; charset="utf-8"
+
+<html><body><p>Urgent action required! Our bank details have changed. Please wire transfer today.</p>
+<p>Verify your account: <a href="http://192.0.2.40/pay">https://vendor-example.com/pay</a></p>
+</body></html>
+--emailshield-sample
+Content-Type: application/octet-stream; name="statement.pdf.exe"
+Content-Disposition: attachment; filename="statement.pdf.exe"
+Content-Transfer-Encoding: base64
+
+ZmljdGlvbmFsIG5vdCBydW5uYWJsZQ==
+--emailshield-sample--
