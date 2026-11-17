@@ -374,6 +374,21 @@
       .window-body {
         padding: 25px 26px 23px;
       }
+      .scan-loading-field {
+        min-height: 200px;
+        padding: 32px;
+        display: flex;
+        align-items: center;
+        background: #fafafa;
+        border: 1px dashed #929292;
+      }
+      .scan-loading-field .email-skeleton {
+        width: 100%;
+        margin: 0;
+      }
+      .mode-tab:disabled {
+        cursor: wait;
+      }
       .email-skeleton {
         display: grid;
         gap: 8px;

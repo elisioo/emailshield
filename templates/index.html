@@ -96,14 +96,6 @@
               </div>
             </div>
             <div class="window-body">
-              <div
-                class="email-skeleton"
-                id="scan-loader"
-                aria-hidden="true"
-                hidden
-              >
-                <span></span><span></span><span></span>
-              </div>
               <p class="card-kicker">// START A NEW CHECK</p>
               <h2 class="scan-heading">Got a suspicious email?</h2>
               <p class="scan-description">
@@ -180,6 +172,12 @@
                 <button class="sample-link" id="load-sample" type="button">
                   ↗ Try a sample email
                 </button>
+              </div>
+
+              <div class="scan-loading-field" id="scan-loader" aria-hidden="true" hidden>
+                <div class="email-skeleton">
+                  <span></span><span></span><span></span>
+                </div>
               </div>
 
               <p

@@ -49,6 +49,7 @@ Content-Type: text/html; charset="utf-8"
     message.classList.toggle("ok", good);
   }
   function setMode(mode) {
+    if (scanButton.disabled) return;
     activeMode = mode;
     tabs.forEach((tab) => {
       const selected = tab.dataset.mode === mode;
@@ -187,6 +188,7 @@ Content-Type: text/html; charset="utf-8"
   }
 
   scanButton.addEventListener("click", async () => {
+    if (scanButton.disabled) return;
     const payload = new FormData();
     payload.append("mode", activeMode);
     if (activeMode === "upload") {
@@ -210,10 +212,15 @@ Content-Type: text/html; charset="utf-8"
       payload.append("email_text", raw);
     }
     scanButton.disabled = true;
+    const minimumScanTime = new Promise((resolve) => window.setTimeout(resolve, 3000));
+    tabs.forEach((tab) => { tab.disabled = true; });
+    $("#upload-panel").hidden = true;
+    $("#paste-panel").hidden = true;
+    resultsSection.hidden = true;
     scanLoader.hidden = false;
     $("#scan").setAttribute("aria-busy", "true");
     scanButton.querySelector("span").textContent = "ANALYZING…";
-    notice("Analyzing using the Flask server. No email is saved.");
+    notice("Scanning email for suspicious indicators...");
     try {
       const response = await fetch("/api/analyze", {
         method: "POST", body: payload, cache: "no-store",
@@ -221,15 +228,20 @@ Content-Type: text/html; charset="utf-8"
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to scan that email.");
+      await minimumScanTime;
       currentReport = result;
       renderReport(result);
       notice("Analysis complete. See the report below.", true);
     } catch (error) {
+      await minimumScanTime;
       notice(error instanceof TypeError ? "Could not reach Flask. Start the server with python app.py." : error.message);
     } finally {
       scanLoader.hidden = true;
       $("#scan").removeAttribute("aria-busy");
       scanButton.disabled = false;
+      tabs.forEach((tab) => { tab.disabled = false; });
+      $("#upload-panel").hidden = activeMode !== "upload";
+      $("#paste-panel").hidden = activeMode !== "paste";
       scanButton.querySelector("span").textContent = "SCAN NOW";
     }
   });
